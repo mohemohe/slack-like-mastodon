@@ -1,0 +1,172 @@
+/* ==UserStyle==
+@name           Slack like Mastodon
+@namespace      io.plusminus.mstdn.like.slack
+@version        1.0.0
+@description    Slack like Mastodon
+@author         mohemohe
+==/UserStyle== */
+
+@-moz-document regexp("https://mstdn\\..*/web/?.*") {
+    @media(min-width:631px) {
+        .ui {
+            flex-direction: row;
+        }
+
+        .tabs-bar {
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+            width: 48px;
+            z-index: 1;
+        }
+
+        .tabs-bar__link {
+            flex: 0;
+        }
+
+        .tabs-bar__link span {
+            display: none;
+        }
+
+        .columns-area {
+            flex-direction: column-reverse;
+        }
+
+        .drawer .drawer__header,
+        .drawer .search,
+        .drawer__inner__mastodon,
+        .column {
+            display: none;
+        }
+
+        .drawer {
+            width: 100%;
+        }
+
+        .drawer[role="region"] {
+            padding: 5px 10px 10px 0px !important;
+            padding-left: 5px !important;
+        }
+
+        .drawer__pager {
+            display: flex;
+            flex-direction: column;
+            height: 56px;
+            width: 100%;
+        }
+
+        .drawer__inner {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+
+        .drawer__inner.darker {
+            display: none;
+        }
+
+        .navigation-bar {
+            padding-right: 0;
+        }
+
+        .navigation-bar__profile {
+            display: none;
+        }
+
+        .compose-form {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .spoiler-input {
+            opacity: 1 !important;
+            width: 0px;
+            margin-right: 0px;
+        }
+
+        .spoiler-input.spoiler-input--visible {
+            width: 210px;
+            margin-right: 10px;
+        }
+
+        .spoiler-input,
+        .spoiler-input *,
+        .compose-form__buttons-wrapper {
+            height: 40px !important;
+        }
+
+        .compose-form__autosuggest-wrapper,
+        .compose-form__autosuggest-wrapper .autosuggest-textarea,
+        .compose-form__autosuggest-wrapper .autosuggest-textarea * {
+            height: 100% !important;
+            min-height: 40px !important;
+            flex: 1;
+            border-radius: 4px !important;
+        }
+
+        .compose-form__modifiers,
+        .compose-form__upload-wrapper,
+        .compose-form__uploads-wrapper {
+            background: transparent !important;
+        }
+
+        .compose-form__buttons-wrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            box-sizing: border-box;
+            border-radius: 4px !important;
+        }
+
+        .compose-form__publish {
+            margin-left: 10px;
+        }
+
+        .compose-form__publish-button-wrapper {
+            position: relative;
+            padding: 0 !important;
+        }
+
+        .compose-form__publish-button-wrapper:after {
+            content: "\f1d8";
+            font-family: FontAwesome;
+            position: absolute;
+            top: calc(50% - (18px / 2));
+            left: calc(50% - (18px / 2));
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .compose-form__publish button {
+            font-size: 0;
+            width: 40px !important;
+            height: 40px !important;
+            display: block;
+        }
+
+        .column:last-child {
+            display: flex;
+            width: 100%;
+            flex: 1;
+        }
+
+        .media-gallery,
+        .media-gallery__item {
+            width: auto !important;
+            height: auto !important;
+        }
+
+        .media-spoiler {
+            max-height: 120px;
+            max-width: calc(100% / 4);
+        }
+
+        .media-gallery__item-thumbnail img {
+            max-height: 120px;
+            width: auto;
+        }
+    }
+}
