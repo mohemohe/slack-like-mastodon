@@ -1,17 +1,19 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.0.0
+@version        1.1.0
 @description    Slack like Mastodon
 @author         mohemohe
 ==/UserStyle== */
 
 @-moz-document regexp("https://mstdn\\..*/web/?.*") {
     @media(min-width:631px) {
+        /* Slackっぽい左右分割レイアウトにする */
         .ui {
             flex-direction: row;
         }
 
+        /* タブバー常時表示 */
         .tabs-bar {
             display: flex;
             flex-direction: column;
@@ -20,21 +22,23 @@
             z-index: 1;
         }
 
+        /* タブバー上寄せ */
         .tabs-bar__link {
             flex: 0;
         }
 
+        /* タブバー文字消し */
         .tabs-bar__link span {
             display: none;
         }
 
+        /* TLと投稿欄の配置を逆転させる */
         .columns-area {
             flex-direction: column-reverse;
         }
 
+        /* シングルカラム化 */
         .drawer .drawer__header,
-        .drawer .search,
-        .drawer__inner__mastodon,
         .column {
             display: none;
         }
@@ -48,10 +52,22 @@
             padding-left: 5px !important;
         }
 
+        .column:last-child {
+            display: flex;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* カラム下検索バーの非表示 */
+        .drawer .search {
+            display: none;
+        }        
+
+        /* 下部投稿欄の横方向配置 */
         .drawer__pager {
             display: flex;
             flex-direction: column;
-            height: 56px;
+            min-height: 56px;
             width: 100%;
         }
 
@@ -59,60 +75,106 @@
             position: relative;
             display: flex;
             flex-direction: row;
+            align-items: flex-end;
             height: 100%;
         }
 
+        /* 投稿欄下部の画像を消す */
+        .drawer__inner__mastodon {
+            display: none;
+        }
+
+        /* 入力欄にオーバーラップされて表示される検索結果を消す */
         .drawer__inner.darker {
             display: none;
         }
 
+        /* 自分のアイコンとか名前とかのコンテナーのpadding 10pxが重複するから打ち消す */
         .navigation-bar {
             padding-right: 0;
         }
 
+        /* 自分の名前とかプロフィール編集とかの非表示 */
         .navigation-bar__profile {
             display: none;
         }
 
+        /* 自分の名前とかプロフィール編集とか右側入力メイン部分のコンテナーを幅いっぱいまで伸ばす
+           コンテナー内は下寄せ */
         .compose-form {
             flex: 1;
             display: flex;
             flex-direction: row;
-            align-items: center;
+            align-items: flex-end;
         }
 
+        /* CW入力部分がふわって出て来るのをやめる */
         .spoiler-input {
             opacity: 1 !important;
             width: 0px;
             margin-right: 0px;
         }
 
-        .spoiler-input.spoiler-input--visible {
-            width: 210px;
-            margin-right: 10px;
-        }
-
+        /* CW入力部分とか画像投稿ボタンとかの高さを固定する */
         .spoiler-input,
         .spoiler-input *,
         .compose-form__buttons-wrapper {
             height: 40px !important;
         }
 
+        /* リプライ元表示・公開垢の鍵トゥート警告とかの水色のアレを固定幅にする */
+        .reply-indicator,
+        .compose-form__warning,
+        .spoiler-input.spoiler-input--visible {
+            width: 210px;
+            margin-right: 10px;
+        }
+
+        /* 入力欄を初期単行表示にする */
         .compose-form__autosuggest-wrapper,
         .compose-form__autosuggest-wrapper .autosuggest-textarea,
         .compose-form__autosuggest-wrapper .autosuggest-textarea * {
-            height: 100% !important;
             min-height: 40px !important;
             flex: 1;
             border-radius: 4px !important;
         }
 
+        /* emojiサジェストを上に表示する */
+        .compose-form__autosuggest-wrapper .autosuggest-textarea {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions {
+            position: relative;
+        }
+
+        /* emojiサジェストがクソ大きいのを普通にする */
+        .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions .autosuggest-textarea__suggestions__item,
+        .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions .autosuggest-textarea__suggestions__item * {
+            max-height: 1em !important;
+            min-height: 1em !important;
+        }
+
+        /* 絵文字サジェストが謎の表示バランスになるから左寄せにする */
+        .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions .autosuggest-textarea__suggestions__item .autosuggest-emoji {
+            display: inline-flex;
+        }
+
+        /* 投稿画像プレビューがなんか白いのを直す */
         .compose-form__modifiers,
         .compose-form__upload-wrapper,
         .compose-form__uploads-wrapper {
             background: transparent !important;
         }
 
+        /* 投稿画像プレビューを縦にスタックする */
+        .compose-form__modifiers .compose-form__uploads-wrapper {
+            display: flex;
+            flex-direction: column !important;
+        }
+
+        /* 画像投稿ボタンの高さが伸びるのを直す */
         .compose-form__buttons-wrapper {
             display: flex;
             flex-direction: row;
@@ -121,10 +183,12 @@
             border-radius: 4px !important;
         }
 
+        /* トゥートボタンに余白がないので足す */
         .compose-form__publish {
             margin-left: 10px;
         }
 
+        /* トゥートボタンの文字を消してFontAwesomeに置き換える */
         .compose-form__publish-button-wrapper {
             position: relative;
             padding: 0 !important;
@@ -147,12 +211,7 @@
             display: block;
         }
 
-        .column:last-child {
-            display: flex;
-            width: 100%;
-            flex: 1;
-        }
-
+        /* TL内の画像が異様に伸びないように固定する */
         .media-gallery,
         .media-gallery__item {
             width: auto !important;
