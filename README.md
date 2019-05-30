@@ -1,4 +1,6 @@
 slack-like-mastodon
 ====
 
-![](https://i.imgur.com/aK5RhIL.png)
+Web UIの設定をシングルカラムにしてから使用してください
+
+![](https://i.imgur.com/TccGX29.png)
