@@ -1,9 +1,17 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.3.0
+@version        1.4.0
 @description    Slack like Mastodon
 @author         mohemohe
+@license        WTFPL
+@preprocessor   stylus
+
+@var            checkbox moveMyInfo "自身のユーザー情報を上部に表示する" 0
+@var            checkbox hideMyIcon "自身のユーザー情報のアイコンを隠す" 0
+@var            checkbox reduceSidebarPadding "サイドバーの密度を上げる" 0
+@var            checkbox replaceToHash "アイコンフォントの代わりに # を表示する" 0
+@var            checkbox selectedItemBackground "選択しているペインを背景色で表現する" 0
 ==/UserStyle== */
 @-moz-document regexp("https://mstdn\\..*/web/?.*") {
     /* Slackっぽい左右分割レイアウトにする */
@@ -21,6 +29,13 @@
         display: block !important;
         width: 220px !important; /* from slack sidebar width */
         flex-shrink: 0;
+    }
+    
+    /* サイドバーがスクロールできるようにする */
+    .columns-area__panels__pane--navigational .columns-area__panels__pane__inner {
+        height: calc(100% - 68px);
+        overflow: auto;
+        box-sizing: border-box;
     }
 
     /* サイドバーのリンクを1行表示にする */
@@ -262,5 +277,65 @@
         max-width: 25%;
         min-width: 25%;
         height: 120px !important;
+    }
+    
+    /* ここまで基本スタイル */
+
+    /* ここから設定によるオーバーライド mastodon本体に組み込むときは好みの設定にしてifを消せばOK */
+
+    if moveMyInfo {
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner {
+            transform: translate3d(0, 68px, 0);
+        }
+        
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .navigation-bar {
+            position: absolute;
+            top: 0;
+        }
+        
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .navigation-bar .navigation-bar__actions {
+            transform: none;
+        }
+        
+        .compose-form {
+            margin-left: 220px !important;
+        }
+    }
+    
+    if hideMyIcon {        
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .navigation-bar .account__avatar {
+            display: none;
+        }
+        
+        if moveMyInfo {
+            .columns-area__panels__pane--navigational .columns-area__panels__pane__inner {
+                transform: translate3d(0, 59px, 0);
+                height: calc(100% - 59px);
+            }
+        }
+    }
+    
+    if reduceSidebarPadding {
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link {
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+    }
+    
+    if replaceToHash {
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link:not([target="_blank"]) .fa {
+            margin: 0 !important;
+        }
+        
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link:not([target="_blank"]) .fa::before {
+            content: "#" !important;
+        }
+    }
+    
+    if selectedItemBackground {
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link.active {
+            background: #2b90d9;
+            color: #d9e1e8;
+        }
     }
 }
