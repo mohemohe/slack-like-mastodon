@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.2.0
+@version        1.3.0
 @description    Slack like Mastodon
 @author         mohemohe
 ==/UserStyle== */
@@ -120,6 +120,14 @@
         flex-direction: row;
         align-items: flex-end;
         background: #17191f;
+    }
+    
+    /* 非公開とかDMとかの表示をサイドバーに押し込む */
+    .compose-form__warning {
+        position: absolute;
+        left: 10px;
+        max-width: 220px;
+        box-sizing: border-box;
     }
 
     /* CW入力部分がふわって出て来るのをやめる */
