@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.4.0
+@version        1.5.0
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -12,6 +12,23 @@
 @var            checkbox reduceSidebarPadding "サイドバーの密度を上げる" 0
 @var            checkbox replaceToHash "アイコンフォントの代わりに # を表示する" 0
 @var            checkbox selectedItemBackground "選択しているペインを背景色で表現する" 0
+@var            checkbox overlayStatusAction "BTやFavなどをマウスオーバーで表示する" 0
+@var            checkbox removeTimelinePadding "メインカラムの余白を消す" 0
+@var            checkbox removeTootBorder "トゥート間のボーダーを消す" 0
+@var            checkbox reverseTimeline "新着トゥートを下に表示する（Experimental）" 0
+@var            checkbox enableTheme "Slackテーマを有効にする（Experimental）" 0
+@var            color columnBg "Column BG" #3F0E40
+@var            color menuHoverBg "Menu Hover BG" #350D36
+@var            color activeItem "Active Item" #1164A3
+@var            color activeItemText "Active Item Text" #FFFFFF
+@var            color hoverItem "Hover Item" #350D36
+@var            color textColor "Text Color" #FFFFFF
+@var            color activePresence "Active Presence" #2BAC76
+@var            color mentionBadge "Mention Badge" #CD2553
+@var            color timelineBg "Timeline BG (extend)" #FFFFFF
+@var            color timelineText "Timeline Text(extend)" #303030
+@var            color timelineLinkText "Timeline Link Text(extend)" #1264a3
+@var            color timelineHoverBg "Timeline Hober BG (extend)" #f8f8f8
 ==/UserStyle== */
 @-moz-document regexp("https://mstdn\\..*/web/?.*") {
     /* Slackっぽい左右分割レイアウトにする */
@@ -80,7 +97,7 @@
         pointer-events: all;
     }
     
-    /* */
+    /* ここにコメントを書こうとしたけど何を書こうとしたか忘れた */
     .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel {
         display: flex;
         flex-direction: row;
@@ -334,8 +351,292 @@
     
     if selectedItemBackground {
         .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link.active {
-            background: #2b90d9;
-            color: #d9e1e8;
+            background: activeItem;
+            color: activeItemText;
+        }
+    }
+    
+    if overlayStatusAction {
+        .status__action-bar {
+            position: absolute;
+            z-index: 1;
+            right: 10px;
+            bottom: -10px;
+            padding: 10px;
+            background: #313543;
+            border: 1px solid #393f4f;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity ease 0.3s;
+        }
+        
+        .status__wrapper.focusable:hover .status__action-bar,
+        .status__action-bar:hover {
+            opacity: 1;
+        }
+    }
+    
+    if removeTimelinePadding {
+        .columns-area__panels__main {
+            padding: 0 !important;
+        }
+        
+        .columns-area__panels__main .react-swipeable-view-container > div {
+            overflow: hidden !important;
+        }
+        
+        .columns-area__panels__main .columns-area--mobile {
+            height: 100% !important;
+            padding-top: 0 !important;
+        }
+    }
+    
+    if removeTootBorder {
+        .status {
+            border: none !important;
+        }
+    }
+    
+    if enableTheme {
+        .columns-area__panels__pane--navigational {
+            background-color: columnBg !important;    
+        }
+        
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link:hover {
+            background-color: menuHoverBg !important;
+        }
+   
+        .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link.active {
+            background-color: activeItem !important;
+            color: activeItemText !important;
+        }
+        
+        .icon-with-badge__badge {
+            background-color: mentionBadge !important;
+        }
+        
+        .column-header__wrapper {
+            border-bottom: 1px solid rgba(134,134,134,.7);
+        }
+        
+        .compose-form:before {
+            content: "";
+            border: 2px solid rgba(134,134,134,.7);
+            border-radius: .375rem;
+            position: absolute;
+            left: calc(10px - 2px);
+            top: calc(10px - 2px);
+            width: calc(100% - 20px + 2 * 2px);
+            height: calc(100% - 20px + 2 * 2px);
+            box-sizing: border-box;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .compose-form {
+            position: relative;
+        }
+        
+        .compose-form,
+        .columns-area__panels__main,
+        .columns-area__panels__main .column-header__wrapper *
+        .columns-area__panels__main .scrollable,
+        .columns-area__panels__main .scrollable .detailed-status, 
+        article,
+        .status__content {
+            background-color: timelineBg !important;
+            color: timelineText !important;
+        }
+        
+        .columns-area__panels__main .scrollable,
+        .display-name strong,
+        .status__content p {
+            color: timelineText !important;
+            font-size: 15px !important;
+        }
+        
+        .status__info .status__display-name {
+            padding-right: 0.5em !important;
+        }
+        
+        .status__info {
+            display: inline-flex;
+            flex-direction: row-reverse;
+        }
+        
+        .display-name__account,
+        .status__info time,
+        .status__prepend {
+            font-size: 12px !important;
+        }
+        
+        article .status__prepend {
+            position: absolute;
+            top: -6px;
+            right: 10px;
+            z-index: 1;
+        }
+        
+        article .status__prepend-icon-wrapper {
+            left: -1.5em !important;
+        }
+        
+        .h-card {
+            background: #e8f5fa;
+            border-radius: 2px;
+            padding: 1px 2px;
+        }
+        
+        .h-card:hover {
+            background: #ddf0f8;
+        }
+        
+        .h-card a:hover {
+            text-decoration: none !important; 
+        }
+        
+        .status-link,
+        .status-link *,
+        .status-card__title {
+            color: timelineLinkText !important;
+            font-size: 15px !important;
+        }
+        
+        article .invisible {
+            color: transparent !important;
+        }
+        
+        article .status__avatar {
+            top: 6px !important;
+        }
+        
+        article .account__avatar,
+        article .status__avatar,
+        article .account__avatar-overlay {
+            width: 36px !important;
+            height: 36px !important;
+        }
+        
+        article .account__avatar-overlay-base {
+            width: 28px !important;
+            height: 28px !important;
+        }
+        
+        article .account__avatar-overlay-overlay {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        
+        article .status {
+            padding: 5px 5px 5px 64px !important;
+            min-height: 45px !important;
+        }
+        
+        article .status__wrapper:hover,
+        article .status__wrapper:hover .status__content {
+            background-color: timelineHoverBg !important;
+        }
+        
+        .status__action-bar {
+            background: timelineBg !important;
+        }
+
+        /*
+        .status__action-bar > *:hover * {
+            color: activeItem !important;
+            fill: activeItem !important;
+            mask-image: linear-gradient(rgba(0, 0, 0, 1.0), transparent);
+        }
+        */
+        
+        .status-card {
+            border: none !important;
+            position: relative;
+            display: flex;
+            flex-direction: column-reverse;
+            padding-left: 1em;
+            pointer-events: none;
+        }
+        
+        .status-card:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            margin-right: 8px;
+            background-color: #ddd;
+            border-radius: 8px;
+        }
+        
+        .status-card:hover {
+            background: inherit !important;
+        }
+        
+        .status-card .status-card__content {
+            display: flex;
+            flex-direction: column-reverse;
+            padding: 0 !important;
+        }
+        
+        .status-card .status-card__content .status-card__title {
+            pointer-events: all;
+        }
+        
+        .status-card .status-card__content .status-card__title:hover {
+            text-decoration: underline;
+        }
+        
+        .status-card__image {
+                flex: 1;
+                height: 120px;
+                max-width: 50%;
+        }
+        
+        .columns-area__panels__main .scrollable {
+            margin-right: 4px;
+            margin-bottom: 6px;
+        }
+        
+        .compose-form__publish {
+            display: none !important;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px !important;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: timelineBg !important;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            width: 8px !important;
+            border-radius: 4px !important;
+            background: rgba(29,28,29,.52) !important;
+        }
+    }
+}
+
+@-moz-document regexp("https://mstdn\\..*/web/timelines/(home|public)/?(local)?") {
+    if reverseTimeline {
+        .scrollable {
+            direction: rtl !important;
+            transform: rotate(180deg) !important;
+        }
+        
+        .scrollable article {
+            direction: ltr !important;
+            transform: rotate(180deg) !important;
+            position: relative !important;
+        }
+        
+        if overlayStatusAction {
+            .status__action-bar {
+                top: 0px;
+                bottom: auto;
+            }
         }
     }
 }
