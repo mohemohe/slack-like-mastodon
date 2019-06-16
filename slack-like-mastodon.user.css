@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.5.0
+@version        1.5.1
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -26,9 +26,12 @@
 @var            color activePresence "Active Presence" #2BAC76
 @var            color mentionBadge "Mention Badge" #CD2553
 @var            color timelineBg "Timeline BG (extend)" #FFFFFF
-@var            color timelineText "Timeline Text(extend)" #303030
-@var            color timelineLinkText "Timeline Link Text(extend)" #1264a3
-@var            color timelineHoverBg "Timeline Hober BG (extend)" #f8f8f8
+@var            color timelineText "Timeline Text (extend)" #303030
+@var            color timelineLinkText "Timeline Link Text (extend)" #1264a3
+@var            color timelineHoverBg "Timeline Hover BG (extend)" #f8f8f8
+@var            color timelineBadgeText "Timeline Badge Text (extend)" rgba(29,28,29,.7)
+@var            color timelineBadgeBg "Timeline Badge BG (extend)" rgba(29,28,29,.13)
+
 ==/UserStyle== */
 @-moz-document regexp("https://mstdn\\..*/web/?.*") {
     /* Slackっぽい左右分割レイアウトにする */
@@ -77,6 +80,28 @@
         max-width: calc(100vw - 190px) !important;
         height: calc(100vh - 50px);
     }
+    
+    .columns-area .search-page {
+        top: 0;
+        position: absolute;
+        padding-top: 48px !important;
+        padding-bottom: 15px !important;
+        box-sizing: border-box;
+    }
+    
+    .compose-panel .search .fa {
+        top: 9px !important;
+    }
+    
+    .columns-area .search-page .search-results {
+        width: 100%;
+    }
+    
+    .columns-area .search-page .drawer__inner {
+        display: block;
+        position: static;
+        overflow: auto !important;
+    }
 
     /* 投稿欄を下部に移動 */
     .columns-area__panels__pane--compositional {
@@ -103,6 +128,8 @@
         flex-direction: row;
         align-items: flex-end;
         margin-top: 0;
+        padding-bottom: inherit !important;
+        margin-bottom: inherit !important;
     }
 
     /* 投稿欄を横いっぱいに広げる */
@@ -119,9 +146,12 @@
     
     /* アイコンとか名前の部分の調整 */
     .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .navigation-bar {
-        width: 220px;
-        box-sizing: border-box;
-        padding: 10px !important;
+        width: 220px !important;
+        min-width: 220px !important;
+        max-width: 220px !important;
+        box-sizing: border-box !important;
+        padding: 10px 10px 0 10px !important;
+        flex-shrink: 0 !important;
     }
     
     .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .navigation-bar .navigation-bar__actions {
@@ -129,44 +159,45 @@
     }
 
     /* 下部投稿欄の横方向配置 */
-    .drawer__pager {
-        display: flex;
-        flex-direction: column;
-        min-height: 56px;
-        width: 100%;
+    /* 投稿欄が微妙に上にずれるのを修正 */
+    .compose-panel {
+        height: 100vh !important;
     }
-
-    .drawer__inner {
-        position: relative;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        height: 100%;
+    
+    .compose-panel .navigation-bar {
+        margin-bottom: 10px !important;
     }
-
 
     /* 自分の名前とかプロフィール編集とか右側入力メイン部分のコンテナーを幅いっぱいまで伸ばす コンテナー内は下寄せ */
    .compose-form {
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        background: #17191f;
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: flex-end !important;
+        background: #17191f !important;
+        min-height: 40px !important;
+        box-sizing: content-box !important;
+        padding: 10px !important;
+        margin: 0 !important;
     }
     
     /* 非公開とかDMとかの表示をサイドバーに押し込む */
     .compose-form__warning {
-        position: absolute;
-        left: 10px;
-        max-width: 220px;
-        box-sizing: border-box;
+        position: absolute !important;
+        left: 10px !important;
+        max-width: 210px !important;
+        box-sizing: border-box !important;
     }
 
     /* CW入力部分がふわって出て来るのをやめる */
     .spoiler-input {
         opacity: 1 !important;
-        width: 0px;
-        margin-right: 0px;
+        width: 0px !important;
+        display: none;
+    }
+    
+    .spoiler-input.spoiler-input--visible {
+        display: block;
     }
 
     /* CW入力部分とか画像投稿ボタンとかの高さを固定する */
@@ -175,13 +206,17 @@
     .compose-form__buttons-wrapper {
         height: 40px !important;
     }
+    
+    /* CW入力部分が詰まるのを直す */
+    .spoiler-input {
+        margin-right: 10px !important;
+    }
 
     /* リプライ元表示・公開垢の鍵トゥート警告とかの水色のアレを固定幅にする */
     .reply-indicator,
     .compose-form__warning,
     .spoiler-input.spoiler-input--visible {
-        width: 210px;
-        margin-right: 10px;
+        width: 210px !important;
         margin-bottom: 0 !important;
     }
 
@@ -190,18 +225,37 @@
     .compose-form__autosuggest-wrapper .autosuggest-textarea,
     .compose-form__autosuggest-wrapper .autosuggest-textarea * {
         min-height: 40px !important;
-        flex: 1;
+        flex: 1 !important;
         border-radius: 4px !important;
+    }
+    
+    /* 入力欄の右マージンを追加 */
+    .compose-form__autosuggest-wrapper {
+        margin-right: 10px !important;
     }
 
     /* emojiサジェストを上に表示する */
     .compose-form__autosuggest-wrapper .autosuggest-textarea {
-        display: flex;
-        flex-direction: column-reverse;
+        display: flex !important;
+        flex-direction: column-reverse !important;
+    }
+    
+    .autosuggest-textarea__suggestions-wrapper {
+        position: absolute !important;
+        left: 10px !important;
+        top: 0 !important;
+        width: calc(100% - 10px * 3) !important;
+        box-sizing: border-box !important;
+    }
+    
+    .autosuggest-textarea__suggestions-wrapper .autosuggest-textarea__suggestions {
+        position: absolute !important;
+        top: auto !important;
+        bottom: 0 !important;
     }
 
     .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions {
-        position: relative;
+        position: relative !important;
     }
 
     .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions .autosuggest-textarea__suggestions__item,
@@ -212,75 +266,86 @@
 
     /* 絵文字サジェストが謎の表示バランスになるから左寄せにする */
     .compose-form__autosuggest-wrapper .autosuggest-textarea .autosuggest-textarea__suggestions .autosuggest-textarea__suggestions__item .autosuggest-emoji {
-        display: inline-flex;
+        display: inline-flex !important;
     }
 
+    /* 投稿画像プレビューの余白を打ち消す */
+    .compose-form__uploads-wrapper {
+        padding: 0 !important;
+    }
+    
     /* 投稿画像プレビューがなんか白いのを直す */
     .compose-form__modifiers,
     .compose-form__upload-wrapper,
     .compose-form__uploads-wrapper {
         background: transparent !important;
     }
+    
+    /* 投稿画像プレビューを入力欄上部に移動 */
+    .compose-form__autosuggest-wrapper {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+    }
 
-    /* 投稿画像プレビューを縦にスタックする */
+    /* 投稿画像プレビューを横にスタックする */
     .compose-form__modifiers .compose-form__uploads-wrapper {
-        display: flex;
-        flex-direction: column !important;
+        display: flex !important;
+        flex-direction: row !important;
     }
 
     /* 画像投稿ボタンの高さが伸びるのを直す */
     .compose-form__buttons-wrapper {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        box-sizing: border-box;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
         border-radius: 4px !important;
-        height: 40px;
+        height: 40px !important;
     }
 
     /* トゥートボタンに余白がないので足す */
     .compose-form__publish {
-        margin-left: 10px;
+        margin-left: 10px !important;
     }
 
     /* トゥートボタンの文字を消してFontAwesomeに置き換える */
     .compose-form__publish-button-wrapper {
-        position: relative;
+        position: relative !important;
         padding: 0 !important;
     }
 
     .compose-form__publish-button-wrapper:after {
-        content: "\f1d8";
-        font-family: FontAwesome;
-        position: absolute;
-        top: calc(50% - (18px / 2));
-        left: calc(50% - (18px / 2));
-        font-size: 18px;
-        pointer-events: none;
+        content: "\f1d8" !important;
+        font-family: FontAwesome !important;
+        position: absolute !important;
+        top: calc(50% - (18px / 2)) !important;
+        left: calc(50% - (18px / 2)) !important;
+        font-size: 18px !important;
+        pointer-events: none !important;
     }
 
     .compose-form__publish button {
-        font-size: 0;
+        font-size: 0 !important;
         width: 40px !important;
         height: 40px !important;
-        display: block;
+        display: block !important;
     }
     
     /* 公開範囲のポップアップが隠れるのを直す */
     .privacy-dropdown__dropdown {
-        z-index: 2;
+        z-index: 2 !important;
     }
 
     /* TL内の画像が異様に伸びないように固定する */
     .media-gallery {
-        display: flex;
+        display: flex !important;
         height: fit-content !important;
     }
 
     .spoiler-button {
-        max-width: 25%;
-        height: 120px;
-        min-width: 25%;
+        max-width: 25% !important;
+        height: 120px !important;
+        min-width: 25% !important;
     }
     
     .spoiler-button.spoiler-button--minified {
@@ -289,13 +354,13 @@
     }
     
     .media-gallery__item {
-        display: flex;
-        align-items: center;
-        max-width: 25%;
-        min-width: 25%;
+        display: flex !important;
+        align-items: center !important;
+        max-width: 25% !important;
+        min-width: 25% !important;
         height: 120px !important;
     }
-    
+
     /* ここまで基本スタイル */
 
     /* ここから設定によるオーバーライド mastodon本体に組み込むときは好みの設定にしてifを消せばOK */
@@ -306,7 +371,7 @@
         }
         
         .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .navigation-bar {
-            position: absolute;
+            position: fixed;
             top: 0;
         }
         
@@ -340,10 +405,12 @@
     }
     
     if replaceToHash {
+        .column-header > button:first-child .fa,
         .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link:not([target="_blank"]) .fa {
             margin: 0 !important;
         }
         
+        .column-header > button:first-child .fa::before,
         .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link:not([target="_blank"]) .fa::before {
             content: "#" !important;
         }
@@ -389,6 +456,14 @@
             height: 100% !important;
             padding-top: 0 !important;
         }
+        
+       .compose-form {
+            padding-left: 0 !important;
+        }
+
+        .compose-form__warning {
+            max-width: 200px !important;
+        }
     }
     
     if removeTootBorder {
@@ -400,6 +475,11 @@
     if enableTheme {
         .columns-area__panels__pane--navigational {
             background-color: columnBg !important;    
+        }
+        
+        .columns-area__panels__pane.columns-area__panels__pane--compositional .columns-area__panels__pane__inner {
+            display: flex;
+            align-items: flex-end;
         }
         
         .columns-area__panels__pane--navigational .columns-area__panels__pane__inner .navigation-panel .column-link:hover {
@@ -419,9 +499,120 @@
             border-bottom: 1px solid rgba(134,134,134,.7);
         }
         
-        .compose-form:before {
+        .compose-panel {
+            height: max-content !important;
+        }
+        
+        .compose-panel,
+        .compose-form {
+            overflow-y: visible !important;
+        }
+        
+        .compose-form .compose-form__buttons-wrapper {
+            position: absolute;
+            bottom: calc(100% - 10px);
+            opacity: 0;
+            transition: opacity ease 0.3s;
+        }
+        
+        .compose-form .compose-form__buttons-wrapper,
+        .compose-form .compose-form__buttons-wrapper * {
+            pointer-events: none !important; 
+        }
+        
+        .compose-panel {
+            height: max-content;
+            position: relative;
+            overflow-y: visible !important;
+        }
+        
+        .column-header > button:first-child,
+        .column-header > button:first-child * {
+            font-weight: bold;
+        }
+        
+        .compose-panel .search {
+            top: calc(10px - 2px);
+            left: calc(220px + 10px - 2px);
+            content: "+";
+            position: absolute;
+            z-index: 2;
+            background: white;
+            width: calc(40px + 2px * 2);
+            height: calc(100% - 10px * 2 + 2px * 2);
+            display: flex !important;
+            align-items: flex-end;
+            justify-content: center;
+            line-height: 40px;
+            color: #aaaaaa;
+            border: 2px solid #aaaaaa;
+            font-size: 24px;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            box-sizing: border-box;
+            margin: 0;
+            nav-index: 1;
+        }
+        
+        .compose-panel .search > * {
+            position: fixed;
+            top: 5px;
+            right: calc(40px + 5px);
+        }
+        
+        .compose-panel .search > label {
+            border: 1px solid #aaaaaa;
+            font-size: 24px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .search-popout {
+            position: fixed;
+            top: calc(48px + 5px);
+            right: calc(40px + 5px);
+            z-index: 1;
+        }
+        
+        .compose-panel .search > label,
+        .compose-panel .search > label * {
+            height: calc(48px - 5px * 3) !important;
+            box-sizing: border-box;
+            background: white;
+        }
+        
+        .compose-panel .search:before {
+            content: "+";
+        }
+        
+        .compose-panel .search:hover,
+        .compose-panel .search:focus {
+            border: 2px solid #007a5a;
+            background: #56b68b;
+            color: white;
+        }
+        
+        .compose-panel .search:hover ~ .compose-form .compose-form__buttons-wrapper,
+        .compose-form .compose-form__buttons-wrapper:hover,
+        .compose-form .compose-form__buttons-wrapper:hover * {
+            opacity: 1;
+            pointer-events: all !important;
+        }
+        
+        .compose-form > .spoiler-input.spoiler-input--visible,
+        .compose-form > .spoiler-input:not(.spoiler-input--visible) + * {
+            margin-left: calc(40px + 10px) !important;
+        }
+        
+        .compose-form > .spoiler-input.spoiler-input--visible + * {
+            border-left: 2px solid #aaaaaa !important;
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+        }
+        
+        .compose-form:after {
             content: "";
-            border: 2px solid rgba(134,134,134,.7);
+            border: 2px solid #aaaaaa;
             border-radius: .375rem;
             position: absolute;
             left: calc(10px - 2px);
@@ -439,12 +630,36 @@
         
         .compose-form,
         .columns-area__panels__main,
-        .columns-area__panels__main .column-header__wrapper *
+        .columns-area__panels__main .column-header__wrapper > * > *,
+        .columns-area__panels__main .column-header__wrapper button,
         .columns-area__panels__main .scrollable,
         .columns-area__panels__main .scrollable .detailed-status, 
         article,
         .status__content {
             background-color: timelineBg !important;
+            color: timelineText !important;
+        }
+        
+        .compose-form__warning {
+            position: fixed !important;
+        }
+        
+        .spoiler-input--visible ~ .compose-form__autosuggest-wrapper:before {
+            position: absolute;
+            left: -2px;
+            content: "";
+            height: 100%;
+            border-left: 2px solid #aaaaaa;
+            margin-right: 0 !important;
+        }
+        
+        .status.status-direct:not(.read) {
+            background-color: timelineBadgeBg !important;
+            color: timelineText !important;
+        }
+        
+        .status.status-direct:not(.read) .status__content {
+            background: transparent !important;
             color: timelineText !important;
         }
         
@@ -497,7 +712,8 @@
         
         .status-link,
         .status-link *,
-        .status-card__title {
+        .status-card__title,
+        .notification__display-name {
             color: timelineLinkText !important;
             font-size: 15px !important;
         }
@@ -515,16 +731,19 @@
         article .account__avatar-overlay {
             width: 36px !important;
             height: 36px !important;
+            background-size: 36px 36px !important;
         }
         
         article .account__avatar-overlay-base {
             width: 28px !important;
             height: 28px !important;
+            background-size: 28px 28px !important;
         }
         
         article .account__avatar-overlay-overlay {
             width: 20px !important;
             height: 20px !important;
+            background-size: 20px 20px !important;
         }
         
         article .status {
@@ -535,6 +754,11 @@
         article .status__wrapper:hover,
         article .status__wrapper:hover .status__content {
             background-color: timelineHoverBg !important;
+        }
+        
+        .status__content__spoiler-link {
+            background-color: timelineBadgeBg !important;
+            color: timelineBadgeText !important;
         }
         
         .status__action-bar {
@@ -601,6 +825,26 @@
         
         .compose-form__publish {
             display: none !important;
+        }
+
+        /*
+        .emoji-picker-wrapper {
+            position: absolute !important;
+            right: 10px !important;
+            bottom: 10px !important;
+            width: 40px !important;
+            height: 40px !important;
+            z-index: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }*/
+        
+        .emoji-picker-dropdown__menu {
+            top: auto !important;
+            left: auto !important;
+            right: calc(10px * 2) !important;
+            bottom: calc(40px + 10px) !important;
         }
         
         ::-webkit-scrollbar {
