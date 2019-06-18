@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.5.1
+@version        1.5.2
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -179,14 +179,26 @@
         box-sizing: content-box !important;
         padding: 10px !important;
         margin: 0 !important;
+        overflow-y: visible !important;
+        position: relative !important;
     }
-    
+
     /* 非公開とかDMとかの表示をサイドバーに押し込む */
     .compose-form__warning {
         position: absolute !important;
         left: 10px !important;
         max-width: 210px !important;
         box-sizing: border-box !important;
+    }
+    
+    /* リプライ表示を上に持っていく */
+    .reply-indicator {
+        position: absolute !important;
+        left: calc(10px - 2px) !important;
+        bottom: 100%;
+        z-index: -1;
+        min-width: calc(100% - 10px * 2);
+        box-sizing: border-box;
     }
 
     /* CW入力部分がふわって出て来るのをやめる */
