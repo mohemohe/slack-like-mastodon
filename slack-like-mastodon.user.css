@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.5.3
+@version        1.5.4
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -34,6 +34,28 @@
 
 ==/UserStyle== */
 @-moz-document regexp("https://mstdn\\..*/web/?.*") {
+    /* 2019/07/28 master追従の仕様変更 */
+    .layout-single-column {
+        overflow: hidden !important;    
+    }
+    
+    .scrollable {
+        overflow-y: scroll !important;
+    }
+    
+    .columns-area__panels__pane--navigational {
+        height: 100vh !important;
+    }
+    
+    .columns-area__panels__main .react-swipeable-view-container > *[aria-hidden="true"] {
+        display: none !important;
+    }
+    
+    .columns-area__panels__main .react-swipeable-view-container {
+        transform: none !important;
+    }
+    /* 2019/07/28 master追従の仕様変更 ここまで */
+    
     /* Slackっぽい左右分割レイアウトにする */
     .columns-area__panels {
         flex-direction: row-reverse;
@@ -53,6 +75,7 @@
     
     /* サイドバーがスクロールできるようにする */
     .columns-area__panels__pane--navigational .columns-area__panels__pane__inner {
+        position: static !important;
         height: calc(100% - 68px);
         overflow: auto;
         box-sizing: border-box;
