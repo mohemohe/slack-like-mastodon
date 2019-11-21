@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        1.5.7
+@version        3.0.1
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -69,6 +69,8 @@
         .columns-area__panels__pane--navigational {
             display: block !important;
             width: 220px !important;
+            min-width: 220px !important;
+            max-width: 220px !important;
             /* from slack sidebar width */
             flex-shrink: 0;
         }
@@ -394,6 +396,19 @@
             max-width: 25% !important;
             min-width: 25% !important;
             height: 120px !important;
+        }
+        
+        /* 絵文字ピッカーのボタンが画像アップロードなどで隠れるやつの修正 */
+        .emoji-picker-dropdown {
+            top: unset !important;
+            bottom: 0.75em !important;
+        }
+        
+        /* 絵文字ピッカーが初回のみ吹き飛ぶやつの修正 */
+        .emoji-picker-dropdown__menu {
+            position: fixed !important;
+            bottom: 28px !important;
+            top: unset !important;
         }
 
         /* ここまで基本スタイル */
