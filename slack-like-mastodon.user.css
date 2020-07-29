@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        3.1.3
+@version        3.2.0
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -143,7 +143,9 @@
             position: absolute;
             width: 100vw;
             min-height: 40px !important;
-            z-index: 1;
+            
+            /* 検索欄を表示 */
+            z-index: 3;
         }
 
         /* 投稿欄レイヤーのマウスイベントを透過させる */
@@ -188,8 +190,8 @@
         
         .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search {
             position: fixed;
-            top: 0;
-            right: 45px !important;
+            top: 10px;
+            right: 55px !important;
             z-index: 1;
         }
         
@@ -547,6 +549,13 @@
             .compose-form__warning {
                 max-width: 200px !important;
             }
+
+            .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search {
+                position: fixed;
+                top: 0 !important;
+                right: 45px !important;
+                z-index: 1;
+            }
         }
 
         if removeTootBorder {
@@ -614,8 +623,8 @@
                 font-weight: bold;
             }
 
-            .compose-panel .search {
-                top: calc(10px - 2px);
+            .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search {
+                top: calc(10px - 2px) !important;
                 left: calc(220px + 10px - 2px);
                 content: "+";
                 position: absolute;
@@ -634,7 +643,7 @@
                 border-bottom-left-radius: 6px;
                 box-sizing: border-box;
                 margin: 0;
-                nav-index: 1;
+                nav-index: 1 !important;
             }
 
             .compose-panel .search > * {
