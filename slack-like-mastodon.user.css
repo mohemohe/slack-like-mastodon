@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        3.0.1
+@version        3.2.0
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -36,16 +36,7 @@
 @-moz-document regexp("https://mstdn\\..*/web/?.*") {
     /* 2019/07/28 master追従の仕様変更 */
     .layout-single-column {
-        overflow: hidden !important;
-
-        .scrollable {
-            overflow-y: scroll !important;
-            contain: strict !important;
-        }
-
-        .columns-area__panels__pane--navigational {
-            height: 100vh !important;
-        }
+        overflow-x: hidden !important;
 
         .columns-area__panels__main .react-swipeable-view-container > *[aria-hidden="true"] {
             display: none !important;
@@ -55,6 +46,25 @@
             transform: none !important;
         }
         /* 2019/07/28 master追従の仕様変更 ここまで */
+
+        /* スクロール読み込み修正ここから */
+        .columns-area__panels__pane {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+        
+        .columns-area__panels__pane__inner {
+            left: 0;
+        }
+        
+        .columns-area__panels__main {
+            margin-left: 220px;
+            margin-bottom: 55px;
+        }
+        /* スクロール読み込み修正ここまで */
+
         /* Slackっぽい左右分割レイアウトにする */
         .columns-area__panels {
             flex-direction: row-reverse;
@@ -101,9 +111,9 @@
         }
 
         .columns-area__panels__main {
-            width: calc(100vw - 220px) !important;
-            max-width: calc(100vw - 220px) !important;
-            height: calc(100vh - 50px);
+            width: calc(100% - 220px) !important;
+            max-width: calc(100% - 220px) !important;
+            // height: calc(100vh - 50px);
         }
 
         .columns-area .search-page {
@@ -133,16 +143,19 @@
             position: absolute;
             width: 100vw;
             min-height: 40px !important;
-            z-index: 1;
+            
+            /* 検索欄を表示 */
+            z-index: 3;
         }
 
         /* 投稿欄レイヤーのマウスイベントを透過させる */
-        .columns-area__panels__pane--compositional,
-        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner,
-        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel {
+        .ui > .columns-area__panels > .columns-area__panels__pane--compositional,
+        .ui > .columns-area__panels > .columns-area__panels__pane--compositional > .columns-area__panels__pane__inner,
+        .ui > .columns-area__panels > .columns-area__panels__pane--compositional > .columns-area__panels__pane__inner > .compose-panel {
             pointer-events: none;
         }
 
+        .columns-area__panels__main .tabs-bar__wrapper, 
         .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel * {
             pointer-events: all;
         }
@@ -159,14 +172,37 @@
 
         /* 投稿欄を横いっぱいに広げる */
         .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel {
+            position: relative;
             width: 100%;
         }
 
         /* 投稿欄の不要な要素を非表示 */
-        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search,
+        /* .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search,*/
         .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .flex-spacer,
         .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .getting-started__footer {
             display: none;
+        }
+        
+        /* 検索窓調整 */
+        .columns-area__panels__pane columns-area__panels__pane--compositional {
+            z-index: 10;
+        }
+        
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search {
+            position: fixed;
+            top: 10px;
+            right: 55px !important;
+            z-index: 1;
+        }
+        
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search__input {
+            background: transparent !important;
+        }
+        
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search:hover,
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search__input:hover, 
+        .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search__input:active {
+            background: #282c37 !important;
         }
 
         /* アイコンとか名前の部分の調整 */
@@ -513,6 +549,13 @@
             .compose-form__warning {
                 max-width: 200px !important;
             }
+
+            .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search {
+                position: fixed;
+                top: 0 !important;
+                right: 45px !important;
+                z-index: 1;
+            }
         }
 
         if removeTootBorder {
@@ -566,7 +609,7 @@
 
             .compose-form .compose-form__buttons-wrapper,
             .compose-form .compose-form__buttons-wrapper * {
-                pointer-events: none !important;
+                /* pointer-events: none !important; */
             }
 
             .compose-panel {
@@ -580,8 +623,8 @@
                 font-weight: bold;
             }
 
-            .compose-panel .search {
-                top: calc(10px - 2px);
+            .columns-area__panels__pane--compositional .columns-area__panels__pane__inner .compose-panel .search {
+                top: calc(10px - 2px) !important;
                 left: calc(220px + 10px - 2px);
                 content: "+";
                 position: absolute;
@@ -600,7 +643,7 @@
                 border-bottom-left-radius: 6px;
                 box-sizing: border-box;
                 margin: 0;
-                nav-index: 1;
+                nav-index: 1 !important;
             }
 
             .compose-panel .search > * {
