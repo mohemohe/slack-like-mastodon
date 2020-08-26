@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Slack like Mastodon
 @namespace      io.plusminus.mstdn.like.slack
-@version        3.2.0
+@version        3.2.0-1
 @description    Slack like Mastodon
 @author         mohemohe
 @license        WTFPL
@@ -405,8 +405,15 @@
         }
 
         /* 公開範囲のポップアップが隠れるのを直す */
+        .emoji-picker-dropdown__menu,
         .privacy-dropdown__dropdown {
-            z-index: 2 !important;
+            z-index: 5 !important;
+        }
+        
+        .privacy-dropdown__dropdown {
+            position: fixed !important;
+            bottom: 28px !important;
+            top: unset !important;
         }
 
         /* TL内の画像が異様に伸びないように固定する */
